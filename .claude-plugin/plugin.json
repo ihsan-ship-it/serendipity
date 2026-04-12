@@ -1,0 +1,11 @@
+{
+  "name": "serendipity",
+  "description": "Capture peripheral insights from AI research sessions. Stop throwing away 90% of what your research finds.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Ihsan Mohamed"
+  },
+  "homepage": "https://github.com/ihsanmoha/serendipity",
+  "license": "MIT",
+  "keywords": ["research", "insights", "serendipity", "knowledge-capture", "ai-research"]
+}
