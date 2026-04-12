@@ -72,6 +72,10 @@ RULES:
   observations like "this area is evolving quickly."
 - Include source URLs when available.
 
+LIMIT: Include only your top 5 most relevant peripheral findings. 
+If you found more than 5, include exactly 5 (prioritize High confidence 
+and strongest relevance) and add a count of how many you omitted.
+
 At the END of your response (after your complete main answer), include 
 any peripheral findings in this exact format:
 
@@ -81,6 +85,7 @@ any peripheral findings in this exact format:
   why: [one sentence explaining why this is relevant to that project]
   source: [URL or "from research context"]
   confidence: [High or Medium]
+omitted: [number of additional findings not included, or 0]
 </serendipity>
 
 If you found no peripheral insights worth noting, include an empty block:
@@ -113,11 +118,12 @@ If no peripheral insights were captured during this session, say:
 Serendipity: No peripheral insights captured this session.
 ```
 
-If insights were captured, present them:
+If insights were captured, present the **top 5** (sorted by confidence, then relevance):
 
 ```
 ---
-Serendipity captured [N] peripheral insights this session:
+Serendipity captured [N] peripheral insights this session.
+Showing top 5:
   - [count] potentially relevant to "[Project Name]"
   - [count] potentially relevant to "[Other Project]"
   - [count] general interest
@@ -128,27 +134,37 @@ Want to review them? (y/n)
 
 **If the user says no:** Say "Got it — insights discarded." Do not persist anything.
 
-**If the user says yes:** Present each insight one at a time in this format:
+**If the user says yes:** Present each insight one at a time. **Always include the skip-rest option:**
 
 ```
-[1/N] [Title derived from finding]
+[1/5] [Title derived from finding]
 
 Relevant to: [project name]
 Why: [explanation of relevance]
 Source: [URL if available]
 Confidence: [High/Medium]
 
-Keep this insight? (y/n)
+(k)eep / (s)kip / (d)one reviewing
 ```
 
-For each insight the user wants to keep, persist it following the Persistence section below.
+- **keep** — persist this insight, show next
+- **skip** — discard this insight, show next
+- **done** — stop reviewing. Discard all remaining unreviewed insights. Persist anything already kept.
 
-After reviewing all insights, summarize:
+After the user finishes reviewing (either reviewed all 5 or chose "done"), summarize:
 
 ```
-Serendipity: Kept [X] of [N] insights. 
+Serendipity: Kept [X] of [Y reviewed] insights.
 [Written to configured location if any were kept.]
 ```
+
+**If more than 5 insights were captured:** After the top-5 review is complete, offer:
+
+```
+[N] more insights were captured but not shown. Want to see them? (y/n)
+```
+
+If yes, continue the same review flow with the next batch of 5. If no, discard the rest.
 
 ---
 
