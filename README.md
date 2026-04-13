@@ -54,11 +54,29 @@ At the end of a session, Serendipity surfaces what it caught and lets you keep w
 
 ## Getting Started
 
-Install in Claude Code:
+### Install via plugin marketplace (recommended)
+
+In Claude Code, add this repo as a plugin marketplace, then install the plugin:
 
 ```
-/plugin install serendipity
+/plugin marketplace add ihsan-ship-it/serendipity
+/plugin install serendipity@ihsan-ship-it-serendipity
 ```
+
+> If the second command says it can't find the marketplace by that name, run `/plugin marketplace list` to see the resolved name and use that after the `@`.
+
+### Manual install (no marketplace)
+
+If you'd rather not add a marketplace, clone and copy the skill into your Claude Code skills directory:
+
+```
+git clone https://github.com/ihsan-ship-it/serendipity.git
+cp -r serendipity/skills/serendipity ~/.claude/skills/serendipity
+```
+
+The skill will be auto-discovered and available as `/serendipity`.
+
+### First-time setup
 
 Register your active projects (one-time, ~30 seconds):
 
@@ -72,7 +90,7 @@ Activate before a research session:
 /serendipity
 ```
 
-That's it. Run research as you normally would — phrase questions so Claude actually does research (multi-source, multi-step) rather than answering inline. Review what it caught at the end.
+That's it. Run research as you normally would — phrase questions so Claude actually does research (multi-source, multi-step) rather than answering inline. Review what it caught at the end, or come back later with `/serendipity review`.
 
 ## Storage Options
 

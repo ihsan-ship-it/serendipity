@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    {
+      "name": "serendipity",
+      "source": {
+        "source": "github",
+        "repo": "ihsan-ship-it/serendipity"
+      },
+      "description": "Capture peripheral insights from AI research sessions. Stop throwing away 90% of what your research finds."
+    }
+  ]
+}
