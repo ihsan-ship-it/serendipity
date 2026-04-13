@@ -1,12 +1,18 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ihsan-ship-it-serendipity",
+  "description": "Serendipity — capture peripheral insights from AI research sessions.",
+  "owner": {
+    "name": "Ihsan Mohamed",
+    "url": "https://github.com/ihsan-ship-it"
+  },
   "plugins": [
     {
       "name": "serendipity",
-      "source": {
-        "source": "github",
-        "repo": "ihsan-ship-it/serendipity"
-      },
-      "description": "Capture peripheral insights from AI research sessions. Stop throwing away 90% of what your research finds."
+      "description": "Capture peripheral insights from AI research sessions. Stop throwing away 90% of what your research finds.",
+      "source": "./",
+      "homepage": "https://github.com/ihsan-ship-it/serendipity",
+      "category": "productivity"
     }
   ]
 }
