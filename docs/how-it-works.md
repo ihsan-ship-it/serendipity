@@ -27,16 +27,24 @@ Serendipity is a Claude Code skill — not a separate application, not a backgro
 4. COLLECT (silent)
    Claude strips the <serendipity> blocks from displayed output.
    You see only the focused research answer.
-   Peripheral findings are held in session memory.
+   Peripheral findings are appended to ~/.serendipity/pending.jsonl
+   (one JSON object per line) so they survive across sessions.
 
-5. REVIEW (end of session)
-   When research is complete, Claude presents a summary:
-   "I captured N insights. Want to review?"
-   You review each one and decide: keep or skip.
+5. REVIEW (end of session, or later via /serendipity review)
+   Claude reads pending.jsonl and presents a summary:
+   "I have N pending insights. Want to review?"
+   You review each one and decide: keep, skip, or done.
+   Reviewing later — even days later, in a new session — works
+   the same way because the pending file persists.
 
 6. PERSIST (with permission)
-   Kept insights are written to your configured location.
-   Nothing is ever saved without your explicit approval.
+   Kept insights are written to your configured location and the
+   matching line is removed from pending.jsonl.
+   Skipped insights are removed from pending.jsonl too.
+   Anything you don't review (or stop reviewing with "done") stays
+   in pending.jsonl and surfaces again next time.
+   Nothing is ever saved to your configured location without your
+   explicit approval.
 ```
 
 ### Why Prompt Injection?
@@ -61,6 +69,6 @@ The agent's primary job is unchanged. Peripheral insight capture is explicitly s
 ## Limitations
 
 - **Depends on model quality:** The relevance of captured insights depends on how well the model understands your projects and makes connections.
-- **Session-scoped:** Insights are captured per session. There's no cross-session memory (though persisted insights serve this purpose).
+- **Capture is per-session, review is not:** Insights are captured during research sessions, but pending insights persist in `~/.serendipity/pending.jsonl` and can be reviewed later (even in a new session) via `/serendipity review`.
 - **Claude Code only (v1):** Currently works as a Claude Code skill. Future versions may support other AI tools.
 - **Not deterministic:** The same research may surface different peripheral findings on different runs.

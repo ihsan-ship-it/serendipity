@@ -101,9 +101,11 @@ As research agents return their responses:
 
 1. Look for `<serendipity>` blocks in each agent's response
 2. Parse the findings from each block
-3. Store them internally — do NOT show them to the user yet
-4. Present only the main research answer to the user
-5. If duplicates appear across agents (same finding, same project), keep only one
+3. **Append each finding to `~/.serendipity/pending.jsonl`** as a single JSON object per line with these fields: `finding`, `relevant_to`, `why`, `source`, `confidence`, `captured_at` (ISO 8601 timestamp), `session_hint` (one-sentence summary of what the user was researching). Create the file if it doesn't exist. Skip writing if a duplicate already exists in the file (same `finding` + `relevant_to`).
+4. Strip the `<serendipity>` block from what you display — show the user only the main research answer
+5. If duplicates appear across agents within the same response cycle (same finding, same project), keep only one
+
+The `pending.jsonl` file is what makes `/serendipity review` work later — even after the session ends. Captured insights live there until the user either keeps them (persisted to the configured target and removed from pending) or skips them (removed from pending).
 
 ### Step 6: Trigger Review
 
@@ -115,13 +117,19 @@ If the user continues with non-research work after the research phase, that's fi
 
 ## End-of-Session Review
 
-If no peripheral insights were captured during this session, say:
+This flow runs in two cases:
+1. **Automatic** — at the end of a research session, after all sub-agents have returned and you've delivered the main answer.
+2. **On demand** — when the user invokes `/serendipity review` (possibly in a brand-new session, days later).
+
+In both cases, **read pending insights from `~/.serendipity/pending.jsonl`**. Each line is one JSON object captured during a previous (or current) research session. If the file does not exist or is empty:
 
 ```
-Serendipity: No peripheral insights captured this session.
+Serendipity: No pending insights to review.
 ```
 
-If insights were captured, present the **top 5** (sorted by confidence, then relevance):
+Otherwise, parse all lines into an in-memory list. De-duplicate (same `finding` + `relevant_to`). Sort by `confidence` (High before Medium), then by `captured_at` (newest first).
+
+Present the **top 5**:
 
 ```
 ---
@@ -135,7 +143,7 @@ Want to review them? (y/n)
 ---
 ```
 
-**If the user says no:** Say "Got it — insights discarded." Do not persist anything.
+**If the user says no:** Say "Got it — pending insights left in place. Run `/serendipity review` whenever you're ready." Do NOT delete `pending.jsonl` — the user may want to review later. Only consumed entries (kept or explicitly skipped) should ever be removed.
 
 **If the user says yes:** Present each insight one at a time. **Always include the skip-rest option:**
 
@@ -150,24 +158,26 @@ Confidence: [High/Medium]
 (k)eep / (s)kip / (d)one reviewing
 ```
 
-- **keep** — persist this insight, show next
-- **skip** — discard this insight, show next
-- **done** — stop reviewing. Discard all remaining unreviewed insights. Persist anything already kept.
+- **keep** — persist this insight to the configured target, then remove the entry from `pending.jsonl`, then show next
+- **skip** — remove the entry from `pending.jsonl`, then show next
+- **done** — stop reviewing. Leave all remaining unreviewed entries in `pending.jsonl` so they remain available next time. Persist anything already kept.
 
 After the user finishes reviewing (either reviewed all 5 or chose "done"), summarize:
 
 ```
-Serendipity: Kept [X] of [Y reviewed] insights.
-[Written to configured location if any were kept.]
+Serendipity: Kept [X], skipped [Y], left [Z] in pending for later.
+[Kept insights written to: configured location, if any.]
 ```
+
+**Removing entries from pending.jsonl:** rewrite the file with the matching line(s) removed. Match on the full JSON object (or on the `finding`+`relevant_to`+`captured_at` triple, which uniquely identifies an entry). If the file becomes empty, you may delete it.
 
 **If more than 5 insights were captured:** After the top-5 review is complete, offer:
 
 ```
-[N] more insights were captured but not shown. Want to see them? (y/n)
+[N] more pending insights not shown. Want to see them? (y/n)
 ```
 
-If yes, continue the same review flow with the next batch of 5. If no, discard the rest.
+If yes, continue the same review flow with the next batch of 5. If no, leave them in `pending.jsonl` for the next review.
 
 ---
 
