@@ -43,6 +43,9 @@ Serendipity active. Watching for peripheral insights relevant to:
 
 Proceed with your research — I'll capture tangential findings silently 
 and ask you about them when the research is done.
+
+(Heads up: capture only fires when I dispatch research sub-agents for 
+your question. Quick inline answers won't surface anything in review.)
 ```
 
 ### Step 4: Research Agent Injection

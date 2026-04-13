@@ -46,9 +46,11 @@ Serendipity intercepts that "everything else."
 
 ## How It Works
 
-The skill operates through prompt injection — instructing research agents to note findings relevant to your registered projects while answering the primary question. No embeddings, vector databases, or background processing required.
+The skill operates through prompt injection — instructing research **sub-agents** to note findings relevant to your registered projects while answering the primary question. No embeddings, vector databases, or background processing required.
 
 At the end of a session, Serendipity surfaces what it caught and lets you keep what matters and skip the rest.
+
+> **When capture fires:** Serendipity captures peripheral insights only when Claude dispatches a research sub-agent (via the Agent tool) for your question. Single-shot answers Claude produces inline have nothing to intercept and won't surface anything in review. In practice this means Serendipity shines on broader research prompts ("research X across these sources", "compare Y and Z", "what's the landscape for…") and quietly does nothing on quick lookups.
 
 ## Getting Started
 
@@ -70,7 +72,7 @@ Activate before a research session:
 /serendipity
 ```
 
-That's it. Run research as you normally would. Review what it caught at the end.
+That's it. Run research as you normally would — phrase questions so Claude actually does research (multi-source, multi-step) rather than answering inline. Review what it caught at the end.
 
 ## Storage Options
 
