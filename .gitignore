@@ -1,2 +1,5 @@
 # Implementation plans (internal)
 docs/superpowers/
+
+# macOS
+.DS_Store
