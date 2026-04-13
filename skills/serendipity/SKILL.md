@@ -222,7 +222,17 @@ Create `~/.serendipity/` directory if it doesn't exist.
 
 ### Step 2: Project Registry
 
-Ask the user:
+Before asking, warn the user about what the registry is used for:
+
+```
+Heads up: whatever you put in the registry will be included verbatim
+in every research sub-agent prompt while Serendipity is active. Keep
+client names, unreleased product details, or anything else sensitive
+out of the descriptions — use generic labels instead (e.g., "Client A
+mobile rebuild" rather than the client's real name).
+```
+
+Then ask:
 
 ```
 What projects or topics are you currently working on? For each one, 
@@ -306,6 +316,8 @@ To remove a project: Edit the file directly or ask the assistant to remove it.
 To update interests: Same — edit directly or ask.
 
 The registry should stay concise. If it grows beyond ~500 tokens (roughly 8-10 projects with descriptions), consider archiving completed projects to keep injection costs low.
+
+**Privacy note:** the contents of `projects.md` are injected verbatim into every research sub-agent prompt while Serendipity is active. Keep sensitive details (real client names, unreleased product specifics, internal codenames) out of the file — use generic labels in the registry and keep the sensitive specifics in your own notes.
 
 ---
 
