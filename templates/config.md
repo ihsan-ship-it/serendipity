@@ -9,5 +9,7 @@ path: ~/.serendipity/insights/
 structure: per-project
 
 ## Filtering
-# Minimum confidence level to show during review. Options: Low, Medium, High
+# Minimum confidence level to show during review. Options: Medium, High
+# (Low is not supported — research agents are instructed to capture
+# only Medium+ confidence findings.)
 min_confidence: Medium
